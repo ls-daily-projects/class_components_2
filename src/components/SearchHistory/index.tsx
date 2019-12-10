@@ -20,7 +20,8 @@ class SearchHistory extends React.Component<
                         display: "flex",
                         maxWidth: "50%",
                         justifyContent: "space-around",
-                        listStyle: "none"
+                        listStyle: "none",
+                        flexWrap: "wrap"
                     }}
                 >
                     {this.props.searchHistory.map((user: GithubUser) => (
