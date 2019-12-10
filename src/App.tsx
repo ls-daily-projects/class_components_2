@@ -1,8 +1,8 @@
 import React from "react"
 
-import { SearchForm } from "./components"
+import { SearchForm, SearchHistory } from "./components"
 
-import { GithubUser } from "./types"
+import {} from "./types"
 import { retrieveCache, cacheUser, checkCache } from "./storage"
 import { fetchUser } from "./githubApi"
 
@@ -48,6 +48,9 @@ class App extends React.Component<AppProps, AppState> {
                 <SearchForm
                     onSubmit={this.handleSearchFormSubmit.bind(this)}
                 ></SearchForm>
+                <SearchHistory
+                    searchHistory={this.state.searchHistory}
+                ></SearchHistory>
             </div>
         )
     }
