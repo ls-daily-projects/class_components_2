@@ -2,7 +2,7 @@ import React from "react"
 
 import { SearchForm } from "./components"
 
-import { cacheUser, checkCache } from "./storage"
+import { retrieveCache, cacheUser, checkCache } from "./storage"
 import { fetchUser } from "./githubApi"
 
 type AppProps = {}
@@ -15,7 +15,13 @@ class App extends React.Component<AppProps, AppState> {
         searchHistory: []
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        this.updateSearchHistory()
+    }
+
+    updateSearchHistory() {
+        this.setState({ ...this.state, searchHistory: retrieveCache() })
+    }
 
     async handleSearchFormSubmit(searchQuery: string) {
         const cachedUser = checkCache(searchQuery)
@@ -28,17 +34,19 @@ class App extends React.Component<AppProps, AppState> {
         try {
             const fetchedUser = await fetchUser(searchQuery)
             cacheUser(fetchedUser)
+            this.updateSearchHistory()
             console.log({ fetchedUser })
         } catch (error) {
-            const { status, statusText } = error.response
-            console.log(status, statusText, error.isAxiosError, error.message)
+            console.log(error, error.response)
         }
     }
 
     render() {
         return (
             <div>
-                <SearchForm onSubmit={this.handleSearchFormSubmit}></SearchForm>
+                <SearchForm
+                    onSubmit={this.handleSearchFormSubmit.bind(this)}
+                ></SearchForm>
             </div>
         )
     }
