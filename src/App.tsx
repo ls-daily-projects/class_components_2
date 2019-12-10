@@ -2,28 +2,33 @@ import React from "react"
 
 import { SearchForm } from "./components"
 
+import { cacheUser, checkCache } from "./storage"
 import { fetchUser } from "./githubApi"
 
 type AppProps = {}
-type AppState = {}
+type AppState = {
+    searchHistory: string[]
+}
 
 class App extends React.Component<AppProps, AppState> {
+    state = {
+        searchHistory: []
+    }
+
+    componentDidMount() {}
+
     async handleSearchFormSubmit(searchQuery: string) {
-        if (sessionStorage.getItem(searchQuery.toLowerCase())) {
-            console.log(
-                `From sessionStorage => ${sessionStorage.getItem(
-                    searchQuery.toLowerCase()
-                )}`
-            )
+        const cachedUser = checkCache(searchQuery)
+
+        if (cachedUser) {
+            console.log({ cachedUser })
             return
         }
+
         try {
-            const user = await fetchUser(searchQuery)
-            sessionStorage.setItem(
-                user.login.toLowerCase(),
-                JSON.stringify(user)
-            )
-            console.log(user)
+            const fetchedUser = await fetchUser(searchQuery)
+            cacheUser(fetchedUser)
+            console.log({ fetchedUser })
         } catch (error) {
             const { status, statusText } = error.response
             console.log(status, statusText, error.isAxiosError, error.message)
