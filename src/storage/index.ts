@@ -1,11 +1,4 @@
-interface GithubUser {
-    login: string
-    id: number
-    avatar_url: string
-    bio?: string
-    followers: number
-    followers_url: string
-}
+import { GithubUser } from "../types"
 
 const CACHE_KEY = "users_cache"
 

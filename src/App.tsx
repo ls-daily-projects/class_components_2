@@ -2,6 +2,7 @@ import React from "react"
 
 import { SearchForm } from "./components"
 
+import { GithubUser } from "./types"
 import { retrieveCache, cacheUser, checkCache } from "./storage"
 import { fetchUser } from "./githubApi"
 
